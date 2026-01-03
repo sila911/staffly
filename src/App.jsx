@@ -2,7 +2,7 @@ import { useState } from 'react'
 import './App.css'
 
 function App() {
-  // 1. STATE: The list of employees
+  // 1. STATE: The list of employees (20 records)
   const [employees, setEmployees] = useState([
     { id: "001", name: "Sem Sila", age: 18, gender: "Male", address: "Phnom Penh" },
     { id: "002", name: "Sok Bophana", age: 30, gender: "Female", address: "Siem Reap" },
@@ -27,32 +27,22 @@ function App() {
   ]);
 
   const [formData, setFormData] = useState({ name: '', age: '', gender: 'Female', address: '' });
-
-  // NEW STATE: specific for Editing
   const [isEditing, setIsEditing] = useState(false);
-  const [currentId, setCurrentId] = useState(null); // Tracks which ID we are editing
-
-  // NEW STATE: specific for Delete Modal
+  const [currentId, setCurrentId] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [employeeToDelete, setEmployeeToDelete] = useState(null);
 
-  // Filter/Sort State
-  const [filterName, setFilterName] = useState(""); // CHANGE: Renamed from filterAddress
+  // Filters
+  const [filterName, setFilterName] = useState("");
   const [filterGender, setFilterGender] = useState("All");
   const [sortType, setSortType] = useState("default");
 
-  // --- HELPER FUNCTION: GENERATE ID ---
+  // --- LOGIC ---
   const generateId = () => {
     if (employees.length === 0) return "001";
-
-    // Find the highest ID number currently in the list
     const maxId = Math.max(...employees.map(emp => parseInt(emp.id)));
-
-    // Add 1 and pad with zeros (e.g., 9 becomes "009", 10 becomes "010")
     return String(maxId + 1).padStart(3, '0');
   };
-
-  // --- HANDLERS ---
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -64,53 +54,41 @@ function App() {
     if (!formData.name || !formData.age) return;
 
     if (isEditing) {
-      // --- UPDATE LOGIC ---
       setEmployees(employees.map(emp =>
         emp.id === currentId ? { ...emp, ...formData } : emp
       ));
       setIsEditing(false);
       setCurrentId(null);
     } else {
-      // --- CREATE LOGIC (Auto ID) ---
       const newEmployee = {
-        id: generateId(), // CALL THE HELPER FUNCTION
+        id: generateId(),
         ...formData,
         age: parseInt(formData.age)
       };
       setEmployees([...employees, newEmployee]);
     }
-
     setFormData({ name: '', age: '', gender: 'Female', address: '' });
   };
 
-  // --- NEW: EDIT HANDLER ---
   const handleEdit = (employee) => {
-    setFormData({
-      name: employee.name,
-      age: employee.age,
-      gender: employee.gender,
-      address: employee.address
-    });
+    setFormData({ ...employee }); // Shorthand for copying all fields
     setIsEditing(true);
     setCurrentId(employee.id);
   };
 
-  // --- NEW: DELETE HANDLER (Step 1: Open Modal) ---
   const confirmDelete = (employee) => {
     setEmployeeToDelete(employee);
     setShowDeleteModal(true);
   };
 
-  // --- NEW: EXECUTE DELETE (Step 2: Actually Delete) ---
   const executeDelete = () => {
     setEmployees(employees.filter(emp => emp.id !== employeeToDelete.id));
     setShowDeleteModal(false);
     setEmployeeToDelete(null);
   };
 
-  // --- SORTING AND FILTERING ---
+  // --- FILTER & SORT ---
   const filteredList = employees.filter(emp => {
-    // CHANGE: Filtering by NAME now
     const matchesName = emp.name.toLowerCase().includes(filterName.toLowerCase());
     const matchesGender = filterGender === "All" || emp.gender === filterGender;
     return matchesName && matchesGender;
@@ -126,19 +104,19 @@ function App() {
 
   return (
     <div className="container">
-      <h1>Employee Directory</h1>
+      <h1>Employee Management</h1>
 
-      {/* FORM */}
+      {/* FORM CARD */}
       <div className="form-card">
         <h3>{isEditing ? `Edit Employee (ID: ${currentId})` : "Add New Employee"}</h3>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="form-grid">
           <div className="form-group">
-            <label>Name</label>
-            <input type="text" name="name" value={formData.name} onChange={handleInputChange} placeholder="Enter name" />
+            <label>Full Name</label>
+            <input type="text" name="name" value={formData.name} onChange={handleInputChange} placeholder="Ex: Chan Dara" />
           </div>
           <div className="form-group">
             <label>Age</label>
-            <input type="number" name="age" value={formData.age} onChange={handleInputChange} placeholder="Enter age" />
+            <input type="number" name="age" value={formData.age} onChange={handleInputChange} placeholder="Ex: 25" />
           </div>
           <div className="form-group">
             <label>Gender</label>
@@ -148,21 +126,20 @@ function App() {
             </select>
           </div>
           <div className="form-group">
-            <label>Address</label>
-            <input type="text" name="address" value={formData.address} onChange={handleInputChange} placeholder="Enter address" />
+            <label>Current Address</label>
+            <input type="text" name="address" value={formData.address} onChange={handleInputChange} placeholder="Ex: Phnom Penh" />
           </div>
           <button type="submit" className="btn-submit">
-            {isEditing ? "Update Employee" : "Submit"}
+            {isEditing ? "Update Details" : "+ Add Employee"}
           </button>
         </form>
       </div>
 
       {/* FILTERS */}
       <div className="filters">
-        {/* CHANGE: Input now filters by Name */}
         <input
           type="text"
-          placeholder="Filter by Name..."
+          placeholder="🔍 Search by Name..."
           value={filterName}
           onChange={(e) => setFilterName(e.target.value)}
         />
@@ -180,45 +157,53 @@ function App() {
         </select>
       </div>
 
-      {/* TABLE */}
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th> {/* Added ID Column */}
-            <th>Name</th>
-            <th>Age</th>
-            <th>Gender</th>
-            <th>Address</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {finalList.map((emp) => (
-            <tr key={emp.id}>
-              <td>{emp.id}</td>
-              <td>{emp.name}</td>
-              <td>{emp.age}</td>
-              <td>{emp.gender}</td>
-              <td>{emp.address}</td>
-              <td>
-                <button className="btn-delete" onClick={() => confirmDelete(emp)}>Delete</button>
-                {/* CHANGE: Added Edit Button */}
-                <button className="btn-edit" onClick={() => handleEdit(emp)}>Edit</button>
-              </td>
+      {/* TABLE CARD */}
+      <div className="table-card">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Age</th>
+              <th>Gender</th>
+              <th>Address</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {finalList.map((emp) => (
+              <tr key={emp.id}>
+                <td>#{emp.id}</td>
+                <td style={{ fontWeight: 'bold' }}>{emp.name}</td>
+                <td>{emp.age}</td>
+                <td>
+                  <span className={`badge ${emp.gender.toLowerCase()}`}>
+                    {emp.gender}
+                  </span>
+                </td>
+                <td>{emp.address}</td>
+                <td>
+                  <div className="action-buttons">
+                    <button className="btn-edit" onClick={() => handleEdit(emp)}>Edit</button>
+                    <button className="btn-delete" onClick={() => confirmDelete(emp)}>Delete</button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {finalList.length === 0 && <p style={{ textAlign: 'center', color: '#888', padding: '20px' }}>No employees found.</p>}
+      </div>
 
-      {/* NEW: DELETE CONFIRMATION MODAL */}
+      {/* DELETE MODAL */}
       {showDeleteModal && (
         <div className="modal-overlay">
           <div className="modal-content">
             <h3>Confirm Delete</h3>
-            <p>Do you want to delete <strong>{employeeToDelete?.name}</strong>?</p>
+            <p>Are you sure you want to delete <strong>{employeeToDelete?.name}</strong>?</p>
             <div className="modal-actions">
               <button className="btn-cancel" onClick={() => setShowDeleteModal(false)}>Cancel</button>
-              <button className="btn-delete" onClick={executeDelete}>Delete</button>
+              <button className="btn-delete" onClick={executeDelete}>Yes, Delete</button>
             </div>
           </div>
         </div>
