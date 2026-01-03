@@ -1,8 +1,7 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react' // Added useRef for scrolling (optional, but window.scrollTo is easier)
 import './App.css'
 
 function App() {
-  // 1. STATE: The list of employees (20 records)
   const [employees, setEmployees] = useState([
     { id: "001", name: "Sem Sila", age: 18, gender: "Male", address: "Phnom Penh" },
     { id: "002", name: "Sok Bophana", age: 30, gender: "Female", address: "Siem Reap" },
@@ -53,6 +52,12 @@ function App() {
     e.preventDefault();
     if (!formData.name || !formData.age) return;
 
+    // --- FIX 2: AGE VALIDATION ---
+    if (parseInt(formData.age) < 15) {
+      alert("Employee must be at least 15 years old.");
+      return; // Stop the function here
+    }
+
     if (isEditing) {
       setEmployees(employees.map(emp =>
         emp.id === currentId ? { ...emp, ...formData } : emp
@@ -71,9 +76,15 @@ function App() {
   };
 
   const handleEdit = (employee) => {
-    setFormData({ ...employee }); // Shorthand for copying all fields
+    setFormData({ ...employee });
     setIsEditing(true);
     setCurrentId(employee.id);
+
+    // --- FIX 3: SCROLL TO TOP ---
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth' // Makes it scroll nicely instead of jumping
+    });
   };
 
   const confirmDelete = (employee) => {
@@ -112,11 +123,24 @@ function App() {
         <form onSubmit={handleSubmit} className="form-grid">
           <div className="form-group">
             <label>Full Name</label>
-            <input type="text" name="name" value={formData.name} onChange={handleInputChange} placeholder="Ex: Chan Dara" />
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+              placeholder="Ex: Chan Dara"
+            />
           </div>
           <div className="form-group">
             <label>Age</label>
-            <input type="number" name="age" value={formData.age} onChange={handleInputChange} placeholder="Ex: 25" />
+            <input
+              type="number"
+              name="age"
+              value={formData.age}
+              onChange={handleInputChange}
+              placeholder="Ex: 25 (Min: 15)"
+              min="15" // Shows browser warning
+            />
           </div>
           <div className="form-group">
             <label>Gender</label>
@@ -127,7 +151,13 @@ function App() {
           </div>
           <div className="form-group">
             <label>Current Address</label>
-            <input type="text" name="address" value={formData.address} onChange={handleInputChange} placeholder="Ex: Phnom Penh" />
+            <input
+              type="text"
+              name="address"
+              value={formData.address}
+              onChange={handleInputChange}
+              placeholder="Ex: Phnom Penh"
+            />
           </div>
           <button type="submit" className="btn-submit">
             {isEditing ? "Update Details" : "+ Add Employee"}

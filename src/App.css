@@ -7,14 +7,12 @@ body {
   margin: 0;
   padding: 0;
   background-color: #f3f4f6;
-  /* Light Grey Background */
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   color: #1f2937;
 }
 
 .container {
   max-width: 1000px;
-  /* Wider container */
   margin: 40px auto;
   padding: 0 20px;
 }
@@ -65,6 +63,7 @@ h1 {
   color: #4b5563;
 }
 
+/* --- FIX: ADDED COLOR BLACK HERE --- */
 .form-group input,
 .form-group select {
   padding: 12px;
@@ -72,6 +71,8 @@ h1 {
   border-radius: 8px;
   font-size: 1rem;
   background-color: #fff;
+  color: #000;
+  /* FORCE TEXT TO BE BLACK */
   transition: all 0.2s;
 }
 
@@ -80,6 +81,12 @@ h1 {
   outline: none;
   border-color: #3b82f6;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+/* Placeholder color (optional, keeps placeholder grey) */
+::placeholder {
+  color: #9ca3af;
+  opacity: 1;
 }
 
 .btn-submit {
@@ -117,18 +124,18 @@ h1 {
   border: 1px solid #e5e7eb;
   border-radius: 6px;
   font-size: 0.95rem;
+  color: #000;
+  /* BLACK TEXT IN FILTERS TOO */
 }
 
 .filters input {
   flex-grow: 1;
-  /* Search bar takes available space */
 }
 
-/* --- TABLE STYLES (The Important Fix) --- */
+/* --- TABLE STYLES --- */
 table {
   width: 100%;
   border-collapse: collapse;
-  /* Removes gaps between cells */
   margin-top: 10px;
 }
 
@@ -163,7 +170,6 @@ td {
   vertical-align: middle;
 }
 
-/* Status Badges for Gender */
 .badge {
   padding: 4px 10px;
   border-radius: 9999px;
@@ -174,17 +180,14 @@ td {
 
 .badge.male {
   background-color: #dbeafe;
-  /* Light Blue */
   color: #1e40af;
 }
 
 .badge.female {
   background-color: #fce7f3;
-  /* Light Pink */
   color: #9d174d;
 }
 
-/* Action Buttons */
 .action-buttons {
   display: flex;
   gap: 8px;
@@ -225,7 +228,6 @@ td {
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(4px);
-  /* Blur effect behind modal */
   display: flex;
   justify-content: center;
   align-items: center;
