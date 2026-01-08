@@ -61,10 +61,19 @@ h1 {
   font-weight: 600;
   font-size: 0.875rem;
   color: #4b5563;
+  display: flex;
+  align-items: center;
 }
 
-/* --- FIX: ADDED COLOR BLACK HERE --- */
-.form-group input,
+/* Standard Required Asterisk (Always Visible) */
+.required-asterisk {
+  color: #ef4444;
+  margin-left: 4px;
+}
+
+/* INPUT STYLES */
+.form-group input[type="text"],
+.form-group input[type="number"],
 .form-group select {
   padding: 12px;
   border: 1px solid #d1d5db;
@@ -72,7 +81,6 @@ h1 {
   font-size: 1rem;
   background-color: #fff;
   color: #000;
-  /* FORCE TEXT TO BE BLACK */
   transition: all 0.2s;
 }
 
@@ -83,7 +91,20 @@ h1 {
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
 }
 
-/* Placeholder color (optional, keeps placeholder grey) */
+/* --- NEW: ERROR STATES --- */
+.input-error {
+  border-color: #ef4444 !important;
+  background-color: #fef2f2 !important;
+}
+
+.error-message {
+  color: #ef4444;
+  font-size: 0.8rem;
+  margin-top: 5px;
+  font-weight: 500;
+}
+
+/* Placeholder color */
 ::placeholder {
   color: #9ca3af;
   opacity: 1;
@@ -107,6 +128,100 @@ h1 {
   background-color: #1d4ed8;
 }
 
+/* --- FILE UPLOAD STYLES --- */
+.upload-box {
+  border: 2px dashed #d1d5db;
+  border-radius: 12px;
+  padding: 30px;
+  text-align: center;
+  cursor: pointer;
+  background-color: #f9fafb;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Error style for upload box */
+.upload-box.input-error {
+  border-color: #ef4444;
+  background-color: #fef2f2;
+}
+
+.upload-box:hover {
+  border-color: #3b82f6;
+  background-color: #eff6ff;
+}
+
+.upload-icon {
+  font-size: 40px;
+  color: #9ca3af;
+  margin-bottom: 10px;
+}
+
+.upload-text {
+  font-size: 1rem;
+  color: #4b5563;
+  margin-bottom: 5px;
+}
+
+.upload-highlight {
+  color: #3b82f6;
+  font-weight: 600;
+}
+
+.upload-hint {
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+/* --- NEW: CIRCULAR PHOTO PREVIEW (Facebook Style) --- */
+.photo-preview-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background-color: #f9fafb;
+}
+
+.preview-label-text {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.photo-preview-image {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 50%;
+  /* Makes it a circle */
+  border: 4px solid white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 15px;
+}
+
+.btn-change-photo {
+  background-color: white;
+  border: 1px solid #d1d5db;
+  color: #374151;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-change-photo:hover {
+  background-color: #f3f4f6;
+  border-color: #9ca3af;
+}
+
 /* --- FILTER SECTION --- */
 .filters {
   display: flex;
@@ -124,8 +239,7 @@ h1 {
   border: 1px solid #e5e7eb;
   border-radius: 6px;
   font-size: 0.95rem;
-  color: #ffffff;
-  /* BLACK TEXT IN FILTERS TOO */
+  color: #000;
 }
 
 .filters input {
@@ -170,6 +284,27 @@ td {
   vertical-align: middle;
 }
 
+.table-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #e5e7eb;
+}
+
+.avatar-placeholder {
+  width: 40px;
+  height: 40px;
+  background-color: #3b82f6;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
 .badge {
   padding: 4px 10px;
   border-radius: 9999px;
@@ -193,6 +328,7 @@ td {
   gap: 8px;
 }
 
+.btn-view,
 .btn-edit,
 .btn-delete {
   padding: 8px 12px;
@@ -202,6 +338,11 @@ td {
   font-weight: 500;
   cursor: pointer;
   transition: opacity 0.2s;
+}
+
+.btn-view {
+  background-color: #10b981;
+  color: white;
 }
 
 .btn-edit {
@@ -214,6 +355,7 @@ td {
   color: white;
 }
 
+.btn-view:hover,
 .btn-edit:hover,
 .btn-delete:hover {
   opacity: 0.9;
@@ -244,45 +386,8 @@ td {
   width: 90%;
 }
 
-.modal-actions {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin-top: 25px;
-}
-
-.btn-cancel {
-  background-color: white;
-  border: 1px solid #d1d5db;
-  color: #374151;
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-/* --- NEW: VIEW BUTTON --- */
-.btn-view {
-  background-color: #10b981;
-  /* Emerald Green */
-  color: white;
-  padding: 8px 12px;
-  border: none;
-  border-radius: 6px;
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: opacity 0.2s;
-}
-
-.btn-view:hover {
-  opacity: 0.9;
-}
-
-/* --- NEW: PROFILE MODAL STYLES --- */
 .profile-modal {
   text-align: left;
-  /* Align text to left for profile */
   max-width: 450px;
 }
 
@@ -291,18 +396,28 @@ td {
   margin-bottom: 20px;
 }
 
-.profile-avatar {
-  width: 80px;
-  height: 80px;
+.profile-image-large {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 15px;
+}
+
+.profile-avatar-placeholder {
+  width: 100px;
+  height: 100px;
   background-color: #e5e7eb;
   color: #6b7280;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2rem;
-  margin: 0 auto 10px auto;
+  font-size: 2.5rem;
   font-weight: bold;
+  margin: 0 auto 15px auto;
 }
 
 .profile-row {
@@ -326,109 +441,55 @@ td {
   color: #111827;
 }
 
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.btn-cancel,
 .btn-close {
+  background-color: white;
+  border: 1px solid #d1d5db;
+  color: #374151;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-close {
+  width: 100%;
+  margin-top: 20px;
   background-color: #3b82f6;
   color: white;
-  width: 100%;
-  padding: 10px;
+  border: none;
+}
+
+/* --- NEW: SUCCESS MODAL --- */
+.success-icon {
+  font-size: 4rem;
+  color: #10b981;
+  /* Green */
+  margin-bottom: 15px;
+  display: block;
+}
+
+.success-title {
+  font-size: 1.5rem;
+  color: #111827;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.btn-success {
+  background-color: #10b981;
+  color: white;
+  padding: 10px 25px;
   border: none;
   border-radius: 8px;
-  margin-top: 20px;
+  font-weight: 600;
   cursor: pointer;
-  font-weight: bold;
-}
-
-/* --- NEW: PHOTO STYLES --- */
-
-/* Small circle image in the table */
-.table-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #e5e7eb;
-}
-
-/* Large profile image in the modal */
-.profile-image-large {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 4px solid #fff;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin-bottom: 15px;
-}
-
-/* Fallback (if no image link is provided) */
-.avatar-placeholder {
-  width: 40px;
-  height: 40px;
-  background-color: #3b82f6;
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  font-size: 0.9rem;
-}
-
-.profile-avatar-placeholder {
-  width: 100px;
-  height: 100px;
-  background-color: #e5e7eb;
-  color: #6b7280;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2.5rem;
-  font-weight: bold;
-  margin: 0 auto 15px auto;
-}
-
-/* --- NEW: FILE UPLOAD STYLES --- */
-.file-upload-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.file-input {
-  padding: 10px;
-  background: #f9fafb;
-  border: 1px dashed #d1d5db;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.file-input:hover {
-  background: #f3f4f6;
-  border-color: #9ca3af;
-}
-
-.photo-preview-container {
-  margin-top: 10px;
-  text-align: center;
-  background: #f3f4f6;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #e5e7eb;
-}
-
-.photo-preview {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 3px solid white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.preview-label {
-  display: block;
-  font-size: 0.8rem;
-  color: #6b7280;
-  margin-bottom: 5px;
+  margin-top: 15px;
 }
