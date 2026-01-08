@@ -169,7 +169,7 @@ function App() {
       <div className="filters">
         <input
           type="text"
-          placeholder="🔍 Search by Name..."
+          placeholder=" Search by Name..."
           value={filterName}
           onChange={(e) => setFilterName(e.target.value)}
         />
