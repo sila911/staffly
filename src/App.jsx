@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react' // Added useRef for scrolling (optional, but window.scrollTo is easier)
+import { useState } from 'react'
 import './App.css'
 
 function App() {
@@ -25,11 +25,17 @@ function App() {
     { id: "020", name: "Mao Sreyleak", age: 19, gender: "Female", address: "Phnom Penh" },
   ]);
 
-  const [formData, setFormData] = useState({ name: '', age: '', gender: 'Female', address: '' });
+  const [formData, setFormData] = useState({ name: '', age: '', gender: '', address: '' });
   const [isEditing, setIsEditing] = useState(false);
   const [currentId, setCurrentId] = useState(null);
+
+  // Modal States
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [employeeToDelete, setEmployeeToDelete] = useState(null);
+
+  // --- NEW: Profile View State ---
+  const [showProfileModal, setShowProfileModal] = useState(false);
+  const [selectedProfile, setSelectedProfile] = useState(null);
 
   // Filters
   const [filterName, setFilterName] = useState("");
@@ -50,12 +56,14 @@ function App() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!formData.name || !formData.age) return;
+    if (!formData.name || !formData.age || !formData.gender) {
+      alert("Please fill in all fields.");
+      return;
+    }
 
-    // --- FIX 2: AGE VALIDATION ---
     if (parseInt(formData.age) < 15) {
       alert("Employee must be at least 15 years old.");
-      return; // Stop the function here
+      return;
     }
 
     if (isEditing) {
@@ -72,7 +80,7 @@ function App() {
       };
       setEmployees([...employees, newEmployee]);
     }
-    setFormData({ name: '', age: '', gender: 'Female', address: '' });
+    setFormData({ name: '', age: '', gender: '', address: '' });
   };
 
   const handleEdit = (employee) => {
@@ -80,11 +88,16 @@ function App() {
     setIsEditing(true);
     setCurrentId(employee.id);
 
-    // --- FIX 3: SCROLL TO TOP ---
     window.scrollTo({
       top: 0,
-      behavior: 'smooth' // Makes it scroll nicely instead of jumping
+      behavior: 'smooth'
     });
+  };
+
+  // --- NEW: VIEW HANDLER ---
+  const handleView = (employee) => {
+    setSelectedProfile(employee);
+    setShowProfileModal(true);
   };
 
   const confirmDelete = (employee) => {
@@ -139,12 +152,13 @@ function App() {
               value={formData.age}
               onChange={handleInputChange}
               placeholder="Ex: 25 (Min: 15)"
-              min="15" // Shows browser warning
+              min="15"
             />
           </div>
           <div className="form-group">
             <label>Gender</label>
             <select name="gender" value={formData.gender} onChange={handleInputChange}>
+              <option value="" disabled>Select Gender</option>
               <option value="Female">Female</option>
               <option value="Male">Male</option>
             </select>
@@ -169,7 +183,7 @@ function App() {
       <div className="filters">
         <input
           type="text"
-          placeholder=" Search by Name..."
+          placeholder="🔍 Search by Name..."
           value={filterName}
           onChange={(e) => setFilterName(e.target.value)}
         />
@@ -214,6 +228,8 @@ function App() {
                 <td>{emp.address}</td>
                 <td>
                   <div className="action-buttons">
+                    {/* --- NEW: VIEW BUTTON --- */}
+                    <button className="btn-view" onClick={() => handleView(emp)}>View</button>
                     <button className="btn-edit" onClick={() => handleEdit(emp)}>Edit</button>
                     <button className="btn-delete" onClick={() => confirmDelete(emp)}>Delete</button>
                   </div>
@@ -235,6 +251,52 @@ function App() {
               <button className="btn-cancel" onClick={() => setShowDeleteModal(false)}>Cancel</button>
               <button className="btn-delete" onClick={executeDelete}>Yes, Delete</button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* --- NEW: PROFILE VIEW MODAL --- */}
+      {showProfileModal && selectedProfile && (
+        <div className="modal-overlay">
+          <div className="modal-content profile-modal">
+            <div className="profile-header">
+              {/* Generates a simple avatar using the first letter of the name */}
+              <div className="profile-avatar">
+                {selectedProfile.name.charAt(0).toUpperCase()}
+              </div>
+              <h3>Employee Profile</h3>
+            </div>
+
+            <div className="profile-details">
+              <div className="profile-row">
+                <span className="profile-label">Employee ID:</span>
+                <span className="profile-value">#{selectedProfile.id}</span>
+              </div>
+              <div className="profile-row">
+                <span className="profile-label">Full Name:</span>
+                <span className="profile-value">{selectedProfile.name}</span>
+              </div>
+              <div className="profile-row">
+                <span className="profile-label">Age:</span>
+                <span className="profile-value">{selectedProfile.age} Years Old</span>
+              </div>
+              <div className="profile-row">
+                <span className="profile-label">Gender:</span>
+                <span className="profile-value">
+                  <span className={`badge ${selectedProfile.gender.toLowerCase()}`}>
+                    {selectedProfile.gender}
+                  </span>
+                </span>
+              </div>
+              <div className="profile-row">
+                <span className="profile-label">Address:</span>
+                <span className="profile-value">{selectedProfile.address}</span>
+              </div>
+            </div>
+
+            <button className="btn-close" onClick={() => setShowProfileModal(false)}>
+              Close Profile
+            </button>
           </div>
         </div>
       )}

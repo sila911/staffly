@@ -260,3 +260,80 @@ td {
   font-weight: 600;
   cursor: pointer;
 }
+
+/* --- NEW: VIEW BUTTON --- */
+.btn-view {
+  background-color: #10b981;
+  /* Emerald Green */
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn-view:hover {
+  opacity: 0.9;
+}
+
+/* --- NEW: PROFILE MODAL STYLES --- */
+.profile-modal {
+  text-align: left;
+  /* Align text to left for profile */
+  max-width: 450px;
+}
+
+.profile-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.profile-avatar {
+  width: 80px;
+  height: 80px;
+  background-color: #e5e7eb;
+  color: #6b7280;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  margin: 0 auto 10px auto;
+  font-weight: bold;
+}
+
+.profile-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.profile-row:last-child {
+  border-bottom: none;
+}
+
+.profile-label {
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.profile-value {
+  font-weight: 600;
+  color: #111827;
+}
+
+.btn-close {
+  background-color: #3b82f6;
+  color: white;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  margin-top: 20px;
+  cursor: pointer;
+  font-weight: bold;
+}
