@@ -1,6 +1,3 @@
-/* =========================================
-   1. GLOBAL RESET & BASICS
-   ========================================= */
 * {
   box-sizing: border-box;
 }
@@ -28,9 +25,6 @@ h1 {
   letter-spacing: -0.025em;
 }
 
-/* =========================================
-   2. CARD STYLES
-   ========================================= */
 .form-card,
 .table-card {
   background: white;
@@ -40,9 +34,6 @@ h1 {
   margin-bottom: 30px;
 }
 
-/* =========================================
-   3. FORM STYLES
-   ========================================= */
 .form-card h3 {
   margin-top: 0;
   padding-bottom: 20px;
@@ -71,7 +62,6 @@ h1 {
   align-items: center;
 }
 
-/* Standard Required Asterisk (Always Visible) */
 .required-asterisk {
   color: #ef4444;
   margin-left: 4px;
@@ -134,9 +124,6 @@ h1 {
   background-color: #1d4ed8;
 }
 
-/* =========================================
-   4. FILE UPLOAD STYLES
-   ========================================= */
 .upload-box {
   border: 2px dashed #d1d5db;
   border-radius: 12px;
@@ -229,9 +216,6 @@ h1 {
   border-color: #9ca3af;
 }
 
-/* =========================================
-   5. FILTER SECTION
-   ========================================= */
 .filters {
   display: flex;
   gap: 15px;
@@ -239,25 +223,26 @@ h1 {
   background: white;
   padding: 15px;
   border-radius: 12px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 4px rgba(180, 180, 180, 0.05);
 }
 
 .filters input,
 .filters select {
   padding: 10px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #d1d5db;
   border-radius: 6px;
   font-size: 0.95rem;
+  background-color: #ffffff;
+  /* Force White Background */
   color: #000000;
+  /* Force Black Text */
+  outline: none;
 }
 
 .filters input {
   flex-grow: 1;
 }
 
-/* =========================================
-   6. TABLE STYLES
-   ========================================= */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -372,9 +357,6 @@ td {
   opacity: 0.9;
 }
 
-/* =========================================
-   7. MODALS (PROFILE, DELETE, SUCCESS)
-   ========================================= */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -507,9 +489,6 @@ td {
   margin-top: 15px;
 }
 
-/* =========================================
-   8. FOOTER & CONTACT SECTION
-   ========================================= */
 .footer-section {
   margin-top: 50px;
   background-color: #ffffff;
@@ -644,16 +623,12 @@ td {
   font-size: 0.9rem;
 }
 
-/* =========================================
-  9. RESPONSIVE DESIGN (PHONE)
-   ========================================= */
 @media (max-width: 768px) {
   .container {
     padding: 0 15px;
     margin-top: 20px;
   }
 
-  /* 1. RESPONSIVE FORM CARD */
   .form-grid {
     grid-template-columns: 1fr;
     gap: 15px;
@@ -663,51 +638,26 @@ td {
   .form-group[style] {
     grid-column: span 1 !important;
   }
-/* ... inside @media (max-width: 768px) ... */
 
-  /* 2. RESPONSIVE FILTERS CARD (1 Top, 2 Bottom) */
   .filters {
     display: flex;
-    flex-wrap: wrap;    /* Allow items to wrap to the next line */
-    gap: 10px;          /* Space between items */
-    
-    /* Remove the scrolling properties from before */
-    overflow-x: visible;
+    flex-wrap: wrap;
+    /* Wraps items to next line */
+    gap: 10px;
+    overflow: visible;
+    /* Disable scroll */
     white-space: normal;
     padding-bottom: 0;
   }
 
-  /* Make the Search Input take the full top row */
   .filters input {
     width: 100%;
     flex-basis: 100%;
   }
 
-  /* Make the Select buttons share the second row (50% each minus gap) */
   .filters select {
-    width: calc(50% - 5px); /* Calculate width accounting for the 10px gap */
+    width: calc(50% - 5px);
     flex-grow: 1;
-  }
-
-  .filters input, 
-  .filters select {
-    width: auto;       /* Let them sit side-by-side */
-    flex-shrink: 0;    /* Prevent them from squashing */
-    min-width: 140px;  /* Ensure they are readable */
-  }
-  
-  /* Hide the ugly scrollbar but allow scrolling */
-  .filters::-webkit-scrollbar {
-    height: 4px;
-  }
-  .filters::-webkit-scrollbar-thumb {
-    background: #d1d5db;
-    border-radius: 4px;
-  }
-
-  .filters input, 
-  .filters select {
-    width: 100%; /* Make them full width */
   }
 
   .form-card,
